@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Car } from 'src/app/models/car';
-import { CarDetail } from 'src/app/models/carDetail';
+import { CarDto } from 'src/app/models/carDto';
+import { CarDtoService } from 'src/app/services/car-dto.service';
 import { CarService } from 'src/app/services/car.service';
 
 @Component({
@@ -9,25 +11,55 @@ import { CarService } from 'src/app/services/car.service';
   styleUrls: ['./car.component.css']
 })
 export class CarComponent implements OnInit {
-  cars : Car[]=[]
-  cardetails: CarDetail[] = []
+  cardetails:CarDto[]=[]
   dataLoaded = false;
-  constructor(private carService: CarService) { }
+  constructor(private carService: CarService , private activatedRoute : ActivatedRoute , private carDtoService:CarDtoService , private router:Router) { }
 
   ngOnInit(): void 
   {
-     this.getCarDetails();
+    this.activatedRoute.params.subscribe(params => {
+      if (params["brandId"] && params["colorId"]) {
+        this.getCarDetails(params["brandId"],params["colorId"]);
+      }
+      else if (params["brandId"]) {
+        this.getCarsByBrandId(params["brandId"]);
+      }
+      else if (params["colorId"]) {
+        this.getCarsByColorId(params["colorId"])
+      }
+      else {
+        this.getCars();
+      }
+    })
   }
 
   getCars(){
-    this.carService.getCars().subscribe(response =>{this.cars = response.data})
-    this.dataLoaded = true;
+    this.carDtoService.getCarsDetails().subscribe(respond=>this.cardetails=respond.data)
+    this.dataLoaded=true;
   }
 
-  getCarDetails()
-  {
-    this.carService.getCarDetails().subscribe(response =>{this.cardetails = response.data})
-    this.dataLoaded = true;
+  getCarsByBrandId(brandId:number){
+    this.carDtoService.getCarsDetailsByBrandId(brandId).subscribe(response => {
+      this.cardetails = response.data;
+      this.dataLoaded = true;
+    })
   }
+
+  getCarsByColorId(colorId:number){
+    this.carDtoService.getCarsDetailsByColorId(colorId).subscribe(response => {
+      this.cardetails = response.data;
+      this.dataLoaded = true;
+    })
+  }
+
+  getCarDetails(brandId:number, colorId:number){
+    this.carDtoService.getCarDetailsByBrandAndColor(brandId, colorId).subscribe(response => {
+      this.cardetails = response.data;
+      this.dataLoaded = true;
+    })
+  }
+
+
+  
 
 }

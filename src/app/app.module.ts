@@ -10,7 +10,9 @@ import { RentalComponent } from './components/rental/rental.component';
 import { CustomerComponent } from './components/customer/customer.component';
 import { BrandComponent } from './components/brand/brand.component';
 import { ColorComponent } from './components/color/color.component';
-import { CarImageComponent } from './components/car-image/car-image.component';
+import { CarFilterComponent } from './components/car-filter/car-filter.component';
+import { FormsModule } from '@angular/forms';
+import { CarDetailComponent } from './components/car-detail/car-detail.component';
 
 @NgModule({
   declarations: [
@@ -21,12 +23,14 @@ import { CarImageComponent } from './components/car-image/car-image.component';
     CustomerComponent,
     BrandComponent,
     ColorComponent,
-    CarImageComponent
+    CarFilterComponent,
+    CarDetailComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

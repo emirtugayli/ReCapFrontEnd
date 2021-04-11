@@ -1,3 +1,4 @@
+import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
 import { Component, OnInit } from '@angular/core';
 import { brand } from 'src/app/models/brand';
 import { BrandService } from 'src/app/services/brand.service';
@@ -10,6 +11,7 @@ import { BrandService } from 'src/app/services/brand.service';
 export class BrandComponent implements OnInit {
 
   brands : brand[] =[]
+  currentBrand : brand;
   dataLoaded = false;
 
   constructor(private brandService : BrandService) { }
@@ -24,4 +26,21 @@ export class BrandComponent implements OnInit {
     this.dataLoaded = true;
   }
 
+  setCurrentBrand(brand:brand)
+  {
+    console.log(brand.id);
+    this.currentBrand = brand;
+  }
+
+  getCurrentBrandClass(brand:brand)
+  {
+    if(brand==this.currentBrand)
+    {
+      return "list-group-item list-group-item-action active";
+    }
+    else
+    {
+      return "list-group-item list-group-item-action"
+    }
+  }
 }
